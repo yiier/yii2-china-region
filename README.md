@@ -2,6 +2,12 @@ china region for Yii2
 =====================
 Yii2中国省市区三级联动
 
+[![Latest Stable Version](https://poser.pugx.org/yiier/yii2-china-region/v/stable)](https://packagist.org/packages/yiier/yii2-china-region) 
+[![Total Downloads](https://poser.pugx.org/yiier/yii2-china-region/downloads)](https://packagist.org/packages/yiier/yii2-china-region) 
+[![Latest Unstable Version](https://poser.pugx.org/yiier/yii2-china-region/v/unstable)](https://packagist.org/packages/yiier/yii2-china-region) 
+[![License](https://poser.pugx.org/yiier/yii2-china-region/license)](https://packagist.org/packages/yiier/yii2-china-region)
+
+
 Installation
 ------------
 
@@ -104,3 +110,8 @@ $model->city['name'];
 $model->district['name'];
 $model->fullRegion;
 ```
+
+Credits
+--------
+
+[chenkby/yii2-region](https://github.com/chenkby/yii2-region)
