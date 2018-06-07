@@ -1,0 +1,21 @@
+{
+    "name": "yiier/yii2-china-region",
+    "description": "Yii2中国省市区三级联动",
+    "type": "yii2-extension",
+    "keywords": ["yii2","extension","region"],
+    "license": "BSD-4-Clause",
+    "authors": [
+        {
+            "name": "forecho",
+            "email": "caizhenghai@gmail.com"
+        }
+    ],
+    "require": {
+        "yiisoft/yii2": "~2.0.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "yiier\\region\\": "src"
+        }
+    }
+}
