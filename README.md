@@ -89,6 +89,8 @@ province 为省份配置，可用的选项可以查看 Html::dropdownList。如�
 
 ![](https://ws1.sinaimg.cn/large/4cc5f9b3gy1fs2yot6wkzj20d702kmwz.jpg)
 
+![](https://ws1.sinaimg.cn/large/4cc5f9b3gy1fs3yom59a6j20h602ijr8.jpg)
+
 **可选功能：使用 behaviors 轻松获取省、市、区、街道的名称**
 
 你需要的 Model 主题 里添加 behaviors（注意：Model 主表字段不要命名为 province，会冲突，会导致此功能用不了，建议字段命名为 province_id；city 、district 和 street 字段同理）
