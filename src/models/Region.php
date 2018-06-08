@@ -17,6 +17,21 @@ use yii\helpers\ArrayHelper;
 class Region extends \yii\db\ActiveRecord
 {
     /**
+     * @var integer 省
+     */
+    const TYPE_PROVINCE = 0;
+
+    /**
+     * @var integer 市
+     */
+    const TYPE_CITY = 1;
+
+    /**
+     * @var integer 区
+     */
+    const TYPE_DISTRICT = 2;
+
+    /**
      * {@inheritdoc}
      */
     public static function tableName()
@@ -46,7 +61,7 @@ class Region extends \yii\db\ActiveRecord
             'code' => Yii::t('app', 'Code'),
             'name' => Yii::t('app', 'Name'),
             'parent_id' => Yii::t('app', 'Parent ID'),
-            'type' => Yii::t('app', '类型 0省 1市 3区'),
+            'type' => Yii::t('app', 'Type'),
         ];
     }
 
