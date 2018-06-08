@@ -58,27 +58,30 @@ public function actions()
 view 页面
 
 ```php
-<?= $form->field($model, 'district')->widget(\yiier\region\RegionWidget::className(), [
+<?= Html::label('地址') ?>
+<?= $form->field($model, 'province_id')->widget(\yiier\region\RegionWidget::className(), [
     'model' => $model,
     'url' => \yii\helpers\Url::toRoute(['get-region']),
     'province' => [
-        'attribute' => 'province',
+        'attribute' => 'province_id',
         'items' => Region::getRegion(),
         'options' => ['class' => 'form-control form-control-inline', 'prompt' => '选择省份']
     ],
     'city' => [
-        'attribute' => 'city',
-        'items' => Region::getRegion($model->province),
+        'attribute' => 'city_id',
+        'items' => Region::getRegion($model->province_id),
         'options' => ['class' => 'form-control form-control-inline', 'prompt' => '选择城市']
     ],
     'district' => [
-        'attribute' => 'district',
-        'items' => Region::getRegion($model['city']),
+        'attribute' => 'district_id',
+        'items' => Region::getRegion($model->city_id),
         'options' => ['class' => 'form-control form-control-inline', 'prompt' => '选择县/区']
     ]
 ])->label(false); ?>
 ```
 province 为省份配置，可用的选项可以查看 Html::dropdownList。如果不需要县/区，可以把 district 删除。
+
+![](https://ws1.sinaimg.cn/large/4cc5f9b3gy1fs2yot6wkzj20d702kmwz.jpg)
 
 **可选功能：使用 behaviors 轻松获取省、市、区的名称**
 
@@ -115,3 +118,5 @@ Credits
 --------
 
 [chenkby/yii2-region](https://github.com/chenkby/yii2-region)
+
+_与之最大的区别是，数据源不同_
