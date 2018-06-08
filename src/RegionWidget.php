@@ -20,18 +20,26 @@ class RegionWidget extends Widget
      * @var string 此属性不用处理
      */
     public $attribute;
+
     /**
      * @var array 省份配置
      */
     public $province = [];
+
     /**
      * @var array 城市配置
      */
     public $city = [];
+
     /**
      * @var array 县/区配置
      */
     public $district = [];
+
+    /**
+     * @var array 街道配置
+     */
+    public $street = [];
 
     /**
      * @var mixed 数据源
@@ -54,6 +62,8 @@ class RegionWidget extends Widget
         $cityDefault = Html::renderSelectOptions('city', ['' => $this->city['options']['prompt']]);
         $joinChar = strripos($this->url, '?') ? '&' : '?';
         $url = $this->url . $joinChar;
+
+        $districtJs = '';
         if (!empty($this->district)) {
             if (empty($this->district['options']['prompt'])) {
                 $this->district['options']['prompt'] = '选择县/区';
@@ -71,7 +81,31 @@ class RegionWidget extends Widget
                     }
                 "
             ]);
+            $districtJs = "$('#{$districtId}').html('{$districtDefault}');";
+
         }
+
+        $streetJs = '';
+        if (!empty($this->street)) {
+            if (empty($this->street['options']['prompt'])) {
+                $this->street['options']['prompt'] = '选择街道';
+            }
+            $streetId = Html::getInputId($this->model, $this->street['attribute']);
+            $streetDefault = Html::renderSelectOptions('street', ['' => $this->street['options']['prompt']]);
+            $this->city['options'] = ArrayHelper::merge($this->city['options'], [
+                'onchange' => "
+                    if($(this).val() != ''){
+                        $.get('{$url}parent_id='+$(this).val(), function(data) {
+                            $('#{$streetId}').html('{$streetDefault}'+data);
+                        })
+                    }else{
+                        $('#{$streetId}').html('{$streetDefault}');
+                    }
+                "
+            ]);
+            $streetJs = "$('#{$streetId}').html('{$streetDefault}');";
+        }
+
         $this->province['options'] = ArrayHelper::merge($this->province['options'], [
             'onchange' => "
                 if($(this).val()!=''){
@@ -81,7 +115,8 @@ class RegionWidget extends Widget
                 }else{
                     $('#{$cityId}').html('{$cityDefault}');
                 }
-                $('#{$districtId}').html('{$districtDefault}');
+                {$districtJs}
+                {$streetJs}
             "
         ]);
     }
@@ -96,6 +131,10 @@ class RegionWidget extends Widget
             $output[] = Html::activeDropDownList($this->model, $this->district['attribute'], $this->district['items'],
                 $this->district['options']);
         }
-        return @implode("\n", $output);
+        if (!empty($this->street)) {
+            $output[] = Html::activeDropDownList($this->model, $this->street['attribute'], $this->street['items'],
+                $this->street['options']);
+        }
+        return implode("\n", $output);
     }
 }

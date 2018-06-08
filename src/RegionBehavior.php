@@ -36,6 +36,11 @@ class RegionBehavior extends Behavior
      */
     public $districtAttribute = 'district_id';
 
+    /**
+     * @var string 街道字段名
+     */
+    public $streetAttribute = 'street_id';
+
     public function getProvince()
     {
         return $this->owner->hasOne(Region::className(), ['id' => $this->provinceAttribute]);
@@ -51,14 +56,19 @@ class RegionBehavior extends Behavior
         return $this->owner->hasOne(Region::className(), ['id' => $this->districtAttribute]);
     }
 
+    public function getStreet()
+    {
+        return $this->owner->hasOne(Region::className(), ['id' => $this->streetAttribute]);
+    }
+
     /**
      * 返回完整的地区名称
-     * @example 广东深圳市宝安区
-     * @param bool $useDistrict 是否要返回县/区
+     * @example 广东深圳市宝安区西乡街道
+     * @param bool $useDistrict 是否要返回县/区和街道
      * @return string
      */
     public function getFullRegion($useDistrict = false)
     {
-        return $this->owner->province['name'] . $this->owner->city['name'] . ($useDistrict ? $this->owner->district['name'] : '');
+        return $this->owner->province['name'] . $this->owner->city['name'] . ($useDistrict ? $this->owner->district['name'] . $this->owner->street['name'] : '');
     }
 }

@@ -12,10 +12,22 @@ use yii\helpers\ArrayHelper;
  * @property int $code
  * @property string $name
  * @property int $parent_id
+ * @property int $out_of_range 是否超区 0否 1超过范围
+ * @property int $status 状态 1正常 0停用
  * @property int $type 类型 0省 1市 3区
  */
 class Region extends \yii\db\ActiveRecord
 {
+    /**
+     * @var integer 正常
+     */
+    const STATUS_ACTIVE = 1;
+
+    /**
+     * @var integer 停用
+     */
+    const STATUS_DISABLED = 0;
+
     /**
      * @var integer 省
      */
@@ -32,6 +44,11 @@ class Region extends \yii\db\ActiveRecord
     const TYPE_DISTRICT = 2;
 
     /**
+     * @var integer 街道
+     */
+    const TYPE_STREET = 3;
+
+    /**
      * {@inheritdoc}
      */
     public static function tableName()
@@ -45,7 +62,7 @@ class Region extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['code', 'parent_id', 'type'], 'integer'],
+            [['code', 'parent_id', 'type', 'out_of_range', 'status'], 'integer'],
             [['name'], 'required'],
             [['name'], 'string', 'max' => 50],
         ];
@@ -61,13 +78,15 @@ class Region extends \yii\db\ActiveRecord
             'code' => Yii::t('app', 'Code'),
             'name' => Yii::t('app', 'Name'),
             'parent_id' => Yii::t('app', 'Parent ID'),
+            'out_of_range' => Yii::t('app', 'Out Of Range'),
+            'status' => Yii::t('app', 'Status'),
             'type' => Yii::t('app', 'Type'),
         ];
     }
 
     public static function getRegion($parentId = 0)
     {
-        $result = static::find()->where(['parent_id' => $parentId])->asArray()->all();
+        $result = static::find()->where(['parent_id' => $parentId, 'status' => self::STATUS_ACTIVE])->asArray()->all();
         return ArrayHelper::map($result, 'id', 'name');
     }
 }
