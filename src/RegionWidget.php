@@ -46,6 +46,11 @@ class RegionWidget extends Widget
      */
     public $url;
 
+    /**
+     * @var bool 是否展示包括超出范围的区
+     */
+    public $showOutOfRange = false;
+
 
     public function init()
     {
@@ -62,6 +67,28 @@ class RegionWidget extends Widget
         $cityDefault = Html::renderSelectOptions('city', ['' => $this->city['options']['prompt']]);
         $joinChar = strripos($this->url, '?') ? '&' : '?';
         $url = $this->url . $joinChar;
+        $outOfRangeUrl = ($this->showOutOfRange) ? '""' : '"&out_of_range=0"';
+
+        $streetJs = '';
+        if (!empty($this->street)) {
+            if (empty($this->street['options']['prompt'])) {
+                $this->street['options']['prompt'] = '选择街道';
+            }
+            $streetId = Html::getInputId($this->model, $this->street['attribute']);
+            $streetDefault = Html::renderSelectOptions('street', ['' => $this->street['options']['prompt']]);
+            $this->district['options'] = ArrayHelper::merge($this->district['options'], [
+                'onchange' => "
+                    if($(this).val() != ''){
+                        $.get('{$url}parent_id='+$(this).val()+{$outOfRangeUrl}, function(data) {
+                            $('#{$streetId}').html('{$streetDefault}'+data);
+                        })
+                    }else{
+                        $('#{$streetId}').html('{$streetDefault}');
+                    }
+                "
+            ]);
+            $streetJs = "$('#{$streetId}').html('{$streetDefault}');";
+        }
 
         $districtJs = '';
         if (!empty($this->district)) {
@@ -73,43 +100,23 @@ class RegionWidget extends Widget
             $this->city['options'] = ArrayHelper::merge($this->city['options'], [
                 'onchange' => "
                     if($(this).val() != ''){
-                        $.get('{$url}parent_id='+$(this).val(), function(data) {
+                        $.get('{$url}parent_id='+$(this).val()+{$outOfRangeUrl}, function(data) {
                             $('#{$districtId}').html('{$districtDefault}'+data);
                         })
                     }else{
                         $('#{$districtId}').html('{$districtDefault}');
                     }
+                    {$streetJs}
                 "
             ]);
             $districtJs = "$('#{$districtId}').html('{$districtDefault}');";
 
         }
 
-        $streetJs = '';
-        if (!empty($this->street)) {
-            if (empty($this->street['options']['prompt'])) {
-                $this->street['options']['prompt'] = '选择街道';
-            }
-            $streetId = Html::getInputId($this->model, $this->street['attribute']);
-            $streetDefault = Html::renderSelectOptions('street', ['' => $this->street['options']['prompt']]);
-            $this->city['options'] = ArrayHelper::merge($this->city['options'], [
-                'onchange' => "
-                    if($(this).val() != ''){
-                        $.get('{$url}parent_id='+$(this).val(), function(data) {
-                            $('#{$streetId}').html('{$streetDefault}'+data);
-                        })
-                    }else{
-                        $('#{$streetId}').html('{$streetDefault}');
-                    }
-                "
-            ]);
-            $streetJs = "$('#{$streetId}').html('{$streetDefault}');";
-        }
-
         $this->province['options'] = ArrayHelper::merge($this->province['options'], [
             'onchange' => "
                 if($(this).val()!=''){
-                    $.get('{$url}parent_id='+$(this).val(), function(data) {
+                    $.get('{$url}parent_id='+$(this).val()+{$outOfRangeUrl}, function(data) {
                         $('#{$cityId}').html('{$cityDefault}'+data);
                     })
                 }else{

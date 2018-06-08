@@ -84,9 +84,9 @@ class Region extends \yii\db\ActiveRecord
         ];
     }
 
-    public static function getRegion($parentId = 0)
+    public static function getRegion($parentId = 0, $outOfRange = null)
     {
-        $result = static::find()->where(['parent_id' => $parentId, 'status' => self::STATUS_ACTIVE])->asArray()->all();
+        $result = static::find()->filterWhere(['parent_id' => $parentId, 'status' => self::STATUS_ACTIVE, 'out_of_range' => $outOfRange])->asArray()->all();
         return ArrayHelper::map($result, 'id', 'name');
     }
 }

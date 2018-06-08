@@ -21,10 +21,11 @@ class RegionAction extends Action
     public function run()
     {
         $parentId = Yii::$app->request->get('parent_id');
+        $outOfRange = Yii::$app->request->get('out_of_range');
         /** @var Region $modelClass */
         $modelClass = Yii::createObject(Region::className());
         if ($parentId > 0) {
-            return Html::renderSelectOptions('district', $modelClass::getRegion($parentId));
+            return Html::renderSelectOptions('district', $modelClass::getRegion($parentId, $outOfRange));
         } else {
             return [];
         }
