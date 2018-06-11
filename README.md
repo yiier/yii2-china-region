@@ -106,7 +106,7 @@ public function behaviors()
             'class' => \yiier\region\RegionBehavior::className(),
             'provinceAttribute' => 'provinceId', // 可选参数 默认 province_id
             'cityAttribute' => 'cityId', // 可选参数 默认 city_id
-            'districtAttribute' => 'districtId' // 可选参数 默认 district_id
+            'districtAttribute' => 'districtId', // 可选参数 默认 district_id
             'streetAttribute' => 'streetId' // 可选参数 默认 street_id
         ],
     ];
